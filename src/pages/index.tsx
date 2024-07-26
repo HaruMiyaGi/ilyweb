@@ -12,64 +12,25 @@ import { generateClient } from "aws-amplify/data";
 import { Schema } from "../../amplify/data/resource";
 import { useQuery } from "@tanstack/react-query";
 import { useQueryClient, useMutation } from "@tanstack/react-query";
-import TodoCreateForm from "../../ui-components/TodoCreateForm";
 import { IconEdit, IconEditOff, IconTrash } from "@tabler/icons-react";
 import { useState } from "react";
+import AutoForm from "@/components/AutoForm";
+import TodoCreateForm from "../../ui-components/TodoCreateForm";
 import TodoUpdateForm from "../../ui-components/TodoUpdateForm";
+import LinksCreateForm from "../../ui-components/LinksCreateForm";
+import LinksUpdateForm from "../../ui-components/LinksUpdateForm";
+import NodeCreateForm from "../../ui-components/NodeCreateForm";
+import NodeUpdateForm from "../../ui-components/NodeUpdateForm";
 
 const client = generateClient<Schema>();
 
 export default function Home() {
-  const queryClient = useQueryClient();
-
-  const { data, isLoading, isSuccess, isError } = useQuery({
-    queryKey: ["todoKey"],
-    queryFn: async () => {
-      const { data } = await client.models.Todo.list();
-      return !data ? null : data;
-    },
-  });
-
-  const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      const { data } = await client.models.Todo.delete({ id });
-      return data;
-    },
-    // When mutate is called:
-    onMutate: async (id) => {
-      // Cancel any outgoing refetches
-      // (so they don't overwrite our optimistic update)
-      await queryClient.cancelQueries({ queryKey: ["todoKey", id] });
-      await queryClient.cancelQueries({ queryKey: ["todoKey"] });
-
-      // Snapshot the previous value
-      const prevData = queryClient.getQueryData(["todoKey", id]);
-
-      // Optimistically update to the new value
-      if (prevData) {
-        queryClient.setQueryData(["todoKey", id], id);
-      }
-
-      // Return a context with the previous and new realEstateProperty
-      return { prevData, id };
-    },
-    // If the mutation fails, use the context we returned above
-    onError: (err, data, context) => {
-      console.error("Error deleting record:", err, data);
-      if (context?.prevData) {
-        queryClient.setQueryData(["todoKey", context.id], context.prevData);
-      }
-    },
-    // Always refetch after error or success:
-    onSettled: (data) => {
-      if (data) {
-        queryClient.invalidateQueries({ queryKey: ["todoKey", data.id] });
-        queryClient.invalidateQueries({ queryKey: ["todoKey"] });
-      }
-    },
-  });
-
-  const [editItemId, setEditItemId] = useState<string | null>();
+  const test = async () => {
+    await client.models.Links.create({
+      sourceId: "c18fef54-d44e-4a4a-b031-297ce2136abd",
+      targetId: "8a94072d-0cd1-4912-b35d-ea475893db92",
+    });
+  };
 
   return (
     <>
@@ -80,94 +41,31 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
-      <TodoCreateForm
-        onSuccess={() => {
-          queryClient.invalidateQueries({ queryKey: ["todoKey"] });
-        }}
-        onError={() => {
-          queryClient.invalidateQueries({ queryKey: ["todoKey"] });
-        }}
+      <Button onClick={() => test()}>test</Button>
+
+      <AutoForm
+        keyName="nodeKey"
+        CreateForm={NodeCreateForm}
+        UpdateForm={NodeUpdateForm}
+        listClient={() => client.models.Node.list()}
+        deleteClient={(id: string) => client.models.Node.delete({ id })}
       />
 
-      {isLoading ? (
-        <Loader variation="linear" />
-      ) : (
-        <>
-          {isError && (
-            <Alert variation="error">
-              <Text>Unexpected Error</Text>
-            </Alert>
-          )}
+      <AutoForm
+        keyName="linkKey"
+        CreateForm={LinksCreateForm}
+        UpdateForm={LinksUpdateForm}
+        listClient={() => client.models.Links.list()}
+        deleteClient={(id: string) => client.models.Links.delete({ id })}
+      />
 
-          {isSuccess && (
-            <Collection items={data!} type="list">
-              {(item, index) => (
-                <Card key={index}>
-                  <Flex alignItems={"center"}>
-                    <Text flex={1}>{item.content}</Text>
-
-                    {editItemId === item.id ? (
-                      <Button //
-                        size="small"
-                        gap={"0.3rem"}
-                        colorTheme="info"
-                        onClick={() => setEditItemId(null)}
-                      >
-                        <IconEditOff />
-                        Cancel
-                      </Button>
-                    ) : (
-                      <Button //
-                        size="small"
-                        gap={"0.3rem"}
-                        colorTheme="info"
-                        onClick={() => setEditItemId(item.id)}
-                        disabled={
-                          editItemId === item.id || deleteMutation.isPending
-                        }
-                      >
-                        <IconEdit />
-                        Edit
-                      </Button>
-                    )}
-
-                    <Button
-                      size="small"
-                      gap={"0.3rem"}
-                      colorTheme="warning"
-                      onClick={() => deleteMutation.mutate(item.id)}
-                      disabled={
-                        editItemId === item.id || deleteMutation.isPending
-                      }
-                    >
-                      <IconTrash />
-                      Remove
-                    </Button>
-                  </Flex>
-
-                  {editItemId === item.id && (
-                    <TodoUpdateForm
-                      id={item.id}
-                      onSuccess={() => {
-                        queryClient.invalidateQueries({
-                          queryKey: ["todoKey"],
-                        });
-                        setEditItemId(null);
-                      }}
-                      onError={() => {
-                        queryClient.invalidateQueries({
-                          queryKey: ["todoKey"],
-                        });
-                        setEditItemId(null);
-                      }}
-                    />
-                  )}
-                </Card>
-              )}
-            </Collection>
-          )}
-        </>
-      )}
+      <AutoForm
+        keyName="todoKey"
+        CreateForm={TodoCreateForm}
+        UpdateForm={TodoUpdateForm}
+        listClient={() => client.models.Todo.list()}
+        deleteClient={(id: string) => client.models.Todo.delete({ id })}
+      />
     </>
   );
 }

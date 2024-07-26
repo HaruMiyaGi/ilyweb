@@ -5,9 +5,11 @@ import outputs from "@/../amplify_outputs.json";
 import { Amplify } from "aws-amplify";
 import {
   Authenticator,
+  Badge,
   Button,
   Flex,
   Heading,
+  Text,
   Theme,
   View,
 } from "@aws-amplify/ui-react";
@@ -32,12 +34,14 @@ export default function App({ Component, pageProps }: AppProps) {
                 <View flex={1}>
                   <Heading>ilyweb</Heading>
                 </View>
-                <View>
-                  <Button size="small" gap="0.3rem" onClick={signOut}>
-                    <IconLogout />
-                    Sign Out
-                  </Button>
-                </View>
+
+                {!!user?.signInDetails?.loginId?.includes("@") && (
+                  <Badge>{user?.signInDetails?.loginId}</Badge>
+                )}
+                <Button size="small" gap="0.3rem" onClick={signOut}>
+                  <IconLogout />
+                  Sign Out
+                </Button>
               </Flex>
 
               <Component {...pageProps} />
