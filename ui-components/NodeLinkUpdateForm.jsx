@@ -4,11 +4,13 @@ import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
-import { createTodo } from "./graphql/mutations";
+import { getNodeLink } from "./graphql/queries";
+import { updateNodeLink } from "./graphql/mutations";
 const client = generateClient();
-export default function TodoCreateForm(props) {
+export default function NodeLinkUpdateForm(props) {
   const {
-    clearOnSuccess = true,
+    id: idProp,
+    nodeLink: nodeLinkModelProp,
     onSuccess,
     onError,
     onSubmit,
@@ -18,16 +20,35 @@ export default function TodoCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    content: "",
+    category: "",
   };
-  const [content, setContent] = React.useState(initialValues.content);
+  const [category, setCategory] = React.useState(initialValues.category);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setContent(initialValues.content);
+    const cleanValues = nodeLinkRecord
+      ? { ...initialValues, ...nodeLinkRecord }
+      : initialValues;
+    setCategory(cleanValues.category);
     setErrors({});
   };
+  const [nodeLinkRecord, setNodeLinkRecord] = React.useState(nodeLinkModelProp);
+  React.useEffect(() => {
+    const queryData = async () => {
+      const record = idProp
+        ? (
+            await client.graphql({
+              query: getNodeLink.replaceAll("__typename", ""),
+              variables: { id: idProp },
+            })
+          )?.data?.getNodeLink
+        : nodeLinkModelProp;
+      setNodeLinkRecord(record);
+    };
+    queryData();
+  }, [idProp, nodeLinkModelProp]);
+  React.useEffect(resetStateValues, [nodeLinkRecord]);
   const validations = {
-    content: [],
+    category: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -55,7 +76,7 @@ export default function TodoCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          content,
+          category: category ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -86,18 +107,16 @@ export default function TodoCreateForm(props) {
             }
           });
           await client.graphql({
-            query: createTodo.replaceAll("__typename", ""),
+            query: updateNodeLink.replaceAll("__typename", ""),
             variables: {
               input: {
+                id: nodeLinkRecord.id,
                 ...modelFields,
               },
             },
           });
           if (onSuccess) {
             onSuccess(modelFields);
-          }
-          if (clearOnSuccess) {
-            resetStateValues();
           }
         } catch (err) {
           if (onError) {
@@ -106,45 +125,46 @@ export default function TodoCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "TodoCreateForm")}
+      {...getOverrideProps(overrides, "NodeLinkUpdateForm")}
       {...rest}
     >
       <TextField
-        label="Content"
+        label="Category"
         isRequired={false}
         isReadOnly={false}
-        value={content}
+        value={category}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              content: value,
+              category: value,
             };
             const result = onChange(modelFields);
-            value = result?.content ?? value;
+            value = result?.category ?? value;
           }
-          if (errors.content?.hasError) {
-            runValidationTasks("content", value);
+          if (errors.category?.hasError) {
+            runValidationTasks("category", value);
           }
-          setContent(value);
+          setCategory(value);
         }}
-        onBlur={() => runValidationTasks("content", content)}
-        errorMessage={errors.content?.errorMessage}
-        hasError={errors.content?.hasError}
-        {...getOverrideProps(overrides, "content")}
+        onBlur={() => runValidationTasks("category", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, "category")}
       ></TextField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}
       >
         <Button
-          children="Clear"
+          children="Reset"
           type="reset"
           onClick={(event) => {
             event.preventDefault();
             resetStateValues();
           }}
-          {...getOverrideProps(overrides, "ClearButton")}
+          isDisabled={!(idProp || nodeLinkModelProp)}
+          {...getOverrideProps(overrides, "ResetButton")}
         ></Button>
         <Flex
           gap="15px"
@@ -154,7 +174,10 @@ export default function TodoCreateForm(props) {
             children="Submit"
             type="submit"
             variation="primary"
-            isDisabled={Object.values(errors).some((e) => e?.hasError)}
+            isDisabled={
+              !(idProp || nodeLinkModelProp) ||
+              Object.values(errors).some((e) => e?.hasError)
+            }
             {...getOverrideProps(overrides, "SubmitButton")}
           ></Button>
         </Flex>

@@ -2,39 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createLinks = /* GraphQL */ `
-  mutation CreateLinks(
-    $condition: ModelLinksConditionInput
-    $input: CreateLinksInput!
-  ) {
-    createLinks(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
-      owner
-      source {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      sourceId
-      target {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      targetId
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const createNode = /* GraphQL */ `
   mutation CreateNode(
     $condition: ModelNodeConditionInput
@@ -45,11 +12,11 @@ export const createNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -58,30 +25,15 @@ export const createNode = /* GraphQL */ `
     }
   }
 `;
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $condition: ModelTodoConditionInput
-    $input: CreateTodoInput!
+export const createNodeLink = /* GraphQL */ `
+  mutation CreateNodeLink(
+    $condition: ModelNodeLinkConditionInput
+    $input: CreateNodeLinkInput!
   ) {
-    createTodo(condition: $condition, input: $input) {
-      content
+    createNodeLink(condition: $condition, input: $input) {
+      category
       createdAt
       id
-      owner
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const deleteLinks = /* GraphQL */ `
-  mutation DeleteLinks(
-    $condition: ModelLinksConditionInput
-    $input: DeleteLinksInput!
-  ) {
-    deleteLinks(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
       owner
       source {
         createdAt
@@ -116,11 +68,11 @@ export const deleteNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -129,30 +81,15 @@ export const deleteNode = /* GraphQL */ `
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $condition: ModelTodoConditionInput
-    $input: DeleteTodoInput!
+export const deleteNodeLink = /* GraphQL */ `
+  mutation DeleteNodeLink(
+    $condition: ModelNodeLinkConditionInput
+    $input: DeleteNodeLinkInput!
   ) {
-    deleteTodo(condition: $condition, input: $input) {
-      content
+    deleteNodeLink(condition: $condition, input: $input) {
+      category
       createdAt
       id
-      owner
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const updateLinks = /* GraphQL */ `
-  mutation UpdateLinks(
-    $condition: ModelLinksConditionInput
-    $input: UpdateLinksInput!
-  ) {
-    updateLinks(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
       owner
       source {
         createdAt
@@ -187,11 +124,11 @@ export const updateNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -200,16 +137,34 @@ export const updateNode = /* GraphQL */ `
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $condition: ModelTodoConditionInput
-    $input: UpdateTodoInput!
+export const updateNodeLink = /* GraphQL */ `
+  mutation UpdateNodeLink(
+    $condition: ModelNodeLinkConditionInput
+    $input: UpdateNodeLinkInput!
   ) {
-    updateTodo(condition: $condition, input: $input) {
-      content
+    updateNodeLink(condition: $condition, input: $input) {
+      category
       createdAt
       id
       owner
+      source {
+        createdAt
+        id
+        name
+        owner
+        updatedAt
+        __typename
+      }
+      sourceId
+      target {
+        createdAt
+        id
+        name
+        owner
+        updatedAt
+        __typename
+      }
+      targetId
       updatedAt
       __typename
     }

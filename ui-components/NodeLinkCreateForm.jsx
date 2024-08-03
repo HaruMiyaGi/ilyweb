@@ -4,9 +4,9 @@ import * as React from "react";
 import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
 import { fetchByPath, getOverrideProps, validateField } from "./utils";
 import { generateClient } from "aws-amplify/api";
-import { createLinks } from "./graphql/mutations";
+import { createNodeLink } from "./graphql/mutations";
 const client = generateClient();
-export default function LinksCreateForm(props) {
+export default function NodeLinkCreateForm(props) {
   const {
     clearOnSuccess = true,
     onSuccess,
@@ -18,16 +18,16 @@ export default function LinksCreateForm(props) {
     ...rest
   } = props;
   const initialValues = {
-    name: "",
+    category: "",
   };
-  const [name, setName] = React.useState(initialValues.name);
+  const [category, setCategory] = React.useState(initialValues.category);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
-    setName(initialValues.name);
+    setCategory(initialValues.category);
     setErrors({});
   };
   const validations = {
-    name: [],
+    category: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -55,7 +55,7 @@ export default function LinksCreateForm(props) {
       onSubmit={async (event) => {
         event.preventDefault();
         let modelFields = {
-          name,
+          category,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -86,7 +86,7 @@ export default function LinksCreateForm(props) {
             }
           });
           await client.graphql({
-            query: createLinks.replaceAll("__typename", ""),
+            query: createNodeLink.replaceAll("__typename", ""),
             variables: {
               input: {
                 ...modelFields,
@@ -106,32 +106,32 @@ export default function LinksCreateForm(props) {
           }
         }
       }}
-      {...getOverrideProps(overrides, "LinksCreateForm")}
+      {...getOverrideProps(overrides, "NodeLinkCreateForm")}
       {...rest}
     >
       <TextField
-        label="Name"
+        label="Category"
         isRequired={false}
         isReadOnly={false}
-        value={name}
+        value={category}
         onChange={(e) => {
           let { value } = e.target;
           if (onChange) {
             const modelFields = {
-              name: value,
+              category: value,
             };
             const result = onChange(modelFields);
-            value = result?.name ?? value;
+            value = result?.category ?? value;
           }
-          if (errors.name?.hasError) {
-            runValidationTasks("name", value);
+          if (errors.category?.hasError) {
+            runValidationTasks("category", value);
           }
-          setName(value);
+          setCategory(value);
         }}
-        onBlur={() => runValidationTasks("name", name)}
-        errorMessage={errors.name?.errorMessage}
-        hasError={errors.name?.hasError}
-        {...getOverrideProps(overrides, "name")}
+        onBlur={() => runValidationTasks("category", category)}
+        errorMessage={errors.category?.errorMessage}
+        hasError={errors.category?.hasError}
+        {...getOverrideProps(overrides, "category")}
       ></TextField>
       <Flex
         justifyContent="space-between"

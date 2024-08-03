@@ -2,39 +2,6 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateLinks = /* GraphQL */ `
-  subscription OnCreateLinks(
-    $filter: ModelSubscriptionLinksFilterInput
-    $owner: String
-  ) {
-    onCreateLinks(filter: $filter, owner: $owner) {
-      createdAt
-      id
-      name
-      owner
-      source {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      sourceId
-      target {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      targetId
-      updatedAt
-      __typename
-    }
-  }
-`;
 export const onCreateNode = /* GraphQL */ `
   subscription OnCreateNode(
     $filter: ModelSubscriptionNodeFilterInput
@@ -45,11 +12,11 @@ export const onCreateNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -58,30 +25,15 @@ export const onCreateNode = /* GraphQL */ `
     }
   }
 `;
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onCreateNodeLink = /* GraphQL */ `
+  subscription OnCreateNodeLink(
+    $filter: ModelSubscriptionNodeLinkFilterInput
     $owner: String
   ) {
-    onCreateTodo(filter: $filter, owner: $owner) {
-      content
+    onCreateNodeLink(filter: $filter, owner: $owner) {
+      category
       createdAt
       id
-      owner
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteLinks = /* GraphQL */ `
-  subscription OnDeleteLinks(
-    $filter: ModelSubscriptionLinksFilterInput
-    $owner: String
-  ) {
-    onDeleteLinks(filter: $filter, owner: $owner) {
-      createdAt
-      id
-      name
       owner
       source {
         createdAt
@@ -116,11 +68,11 @@ export const onDeleteNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -129,30 +81,15 @@ export const onDeleteNode = /* GraphQL */ `
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onDeleteNodeLink = /* GraphQL */ `
+  subscription OnDeleteNodeLink(
+    $filter: ModelSubscriptionNodeLinkFilterInput
     $owner: String
   ) {
-    onDeleteTodo(filter: $filter, owner: $owner) {
-      content
+    onDeleteNodeLink(filter: $filter, owner: $owner) {
+      category
       createdAt
       id
-      owner
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateLinks = /* GraphQL */ `
-  subscription OnUpdateLinks(
-    $filter: ModelSubscriptionLinksFilterInput
-    $owner: String
-  ) {
-    onUpdateLinks(filter: $filter, owner: $owner) {
-      createdAt
-      id
-      name
       owner
       source {
         createdAt
@@ -187,11 +124,11 @@ export const onUpdateNode = /* GraphQL */ `
       id
       name
       owner
-      sourceLinks {
+      sourceNodes {
         nextToken
         __typename
       }
-      targetLinks {
+      targetNodes {
         nextToken
         __typename
       }
@@ -200,16 +137,34 @@ export const onUpdateNode = /* GraphQL */ `
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo(
-    $filter: ModelSubscriptionTodoFilterInput
+export const onUpdateNodeLink = /* GraphQL */ `
+  subscription OnUpdateNodeLink(
+    $filter: ModelSubscriptionNodeLinkFilterInput
     $owner: String
   ) {
-    onUpdateTodo(filter: $filter, owner: $owner) {
-      content
+    onUpdateNodeLink(filter: $filter, owner: $owner) {
+      category
       createdAt
       id
       owner
+      source {
+        createdAt
+        id
+        name
+        owner
+        updatedAt
+        __typename
+      }
+      sourceId
+      target {
+        createdAt
+        id
+        name
+        owner
+        updatedAt
+        __typename
+      }
+      targetId
       updatedAt
       __typename
     }

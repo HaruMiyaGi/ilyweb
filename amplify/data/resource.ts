@@ -2,20 +2,18 @@ import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
 
 const schema = a
   .schema({
-    Todo: a.model({
-      content: a.string(),
-    }),
-    Node: a.model({
-      name: a.string(),
-      sourceLinks: a.hasMany("Links", "sourceId"),
-      targetLinks: a.hasMany("Links", "targetId"),
-    }),
-    Links: a.model({
-      name: a.string(),
+    NodeLink: a.model({
+      category: a.string(),
+
       sourceId: a.id().required(),
       source: a.belongsTo("Node", "sourceId"),
       targetId: a.id().required(),
       target: a.belongsTo("Node", "targetId"),
+    }),
+    Node: a.model({
+      name: a.string().required(),
+      sourceNodes: a.hasMany("NodeLink", "sourceId"),
+      targetNodes: a.hasMany("NodeLink", "targetId"),
     }),
   })
   .authorization((allow) => [allow.owner()]);
