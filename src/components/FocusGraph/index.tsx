@@ -14,7 +14,7 @@ interface IParams {
 export default ({ ...params }: IParams) => {
 	const fgRef = useRef<ForceGraphMethods>();
 
-	params.nodeLinks.forEach((link: any) => {
+	params.nodeLinks?.forEach((link: any) => {
 		const a = params.data.find(({ id }: any) => id === link.sourceId);
 		const b = params.data.find(({ id }: any) => id === link.targetId);
 
@@ -34,10 +34,6 @@ export default ({ ...params }: IParams) => {
 	let hoverNode: any = null;
 
 	function updateHighlight() {
-		// trigger update of highlighted objects in scene
-		// Graph.nodeColor(Graph.nodeColor())
-		// 	.linkWidth(Graph.linkWidth())
-		// 	.linkDirectionalParticles(Graph.linkDirectionalParticles());
 		if (!!fgRef.current) {
 			fgRef.current.refresh();
 		}
@@ -88,10 +84,10 @@ export default ({ ...params }: IParams) => {
 					highlightLinks.clear();
 					if (node) {
 						highlightNodes.add(node);
-						node.neighbors.forEach((neighbor: any) =>
+						node.neighbors?.forEach((neighbor: any) =>
 							highlightNodes.add(neighbor),
 						);
-						node.links.forEach((link: any) => highlightLinks.add(link));
+						node.links?.forEach((link: any) => highlightLinks.add(link));
 					}
 
 					hoverNode = node || null;
@@ -110,8 +106,6 @@ export default ({ ...params }: IParams) => {
 
 					updateHighlight();
 				}}
-				//
-
 				onNodeClick={(node: any) => {
 					// const distance = 40;
 					// const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
@@ -127,7 +121,6 @@ export default ({ ...params }: IParams) => {
 					// 		1000, // ms transition duration
 					// 	);
 					// }
-
 					params.onNodeSelect(node);
 				}}
 				controlType="trackball"
