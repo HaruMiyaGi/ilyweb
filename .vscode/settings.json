@@ -3,5 +3,11 @@
 		"source.fixAll": "always",
 		"source.organizeImports": "always",
 		"source.removeUnusedImports": "always"
+	},
+	"files.exclude": {
+		"**/.amplify": true,
+		"**/.next": true,
+		"next-env.d.ts": true,
+		"amplify_outputs.json": true
 	}
 }

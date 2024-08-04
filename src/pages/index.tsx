@@ -2,16 +2,15 @@ import FocusGraphWrapper from '@/components/FocusGraphWrapper';
 import useResize from '@/helpers/resize';
 import {
 	Autocomplete,
+	Badge,
 	Button,
 	Card,
-	Divider,
 	Flex,
 	HighlightMatch,
 	Loader,
-	Message,
-	Text,
+	SearchField,
 } from '@aws-amplify/ui-react';
-import { IconEdit, IconEditOff, IconTrash } from '@tabler/icons-react';
+import { IconTrash, IconX } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { generateClient } from 'aws-amplify/data';
 import Head from 'next/head';
@@ -41,7 +40,13 @@ export default function Home() {
 		queryKey: [`nodeLinkKey`],
 		queryFn: async () => {
 			const { data } = await client.models.NodeLink.list();
-			return !data ? null : data;
+			return !data
+				? null
+				: data.sort((a, b) => {
+						return (
+							new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+						);
+					});
 		},
 	});
 
@@ -50,7 +55,14 @@ export default function Home() {
 			queryKey: [`nodeKey`],
 			queryFn: async () => {
 				const { data } = await client.models.Node.list();
-				return !data ? null : data;
+				return !data
+					? null
+					: data.sort((a, b) => {
+							return (
+								new Date(b.createdAt).getTime() -
+								new Date(a.createdAt).getTime()
+							);
+						});
 			},
 		});
 	const deleteMutation = useMutation({
@@ -99,7 +111,6 @@ export default function Home() {
 	const [previewNode, setPreviewNode] = useState<
 		Schema['Node']['type'] | null
 	>();
-	const [previewEditNodeId, setPreviewEditNodeId] = useState<string | null>();
 
 	const handleUpdateAction = (close: boolean) => {
 		queryClient.invalidateQueries({ queryKey: [`nodeKey`] });
@@ -107,10 +118,27 @@ export default function Home() {
 		onResize();
 
 		if (close) {
-			setPreviewEditNodeId(null);
 			setPreviewNode(null);
 		}
 	};
+
+	const [linkTo, setLinkTo] = useState<string>('');
+	const [linkFrom, setLinkFrom] = useState<string>('');
+
+	const getLinkedNodes = (nodeId: string) => {
+		const connectedLinks = nodeLinks?.filter(
+			({ sourceId, targetId }) => sourceId === nodeId || targetId === nodeId,
+		);
+		const availableNodes = data?.filter(({ id }) =>
+			connectedLinks?.some(
+				(link) =>
+					(link.sourceId === id || link.targetId === id) && id !== nodeId,
+			),
+		);
+		return availableNodes;
+	};
+
+	// const [globalSearch, setGlobalSearch] = useState('');
 
 	return (
 		<>
@@ -121,17 +149,23 @@ export default function Home() {
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
+			<div id="global-search">
+				<SearchField
+					label="Search"
+					placeholder="Search here..."
+					onSubmit={(searchValue) => console.log(searchValue)}
+					onClear={() => console.log('clear')}
+				/>
+			</div>
+
 			<div id="link-list">
-				{data?.map((item) => (
-					<div key={item.id}>
-						{item.label} (
-						{
-							nodeLinks?.filter(
-								({ sourceId, targetId }) =>
-									sourceId === item.id || targetId === item.id,
-							).length
-						}
-						)
+				{data?.map((node) => (
+					<div
+						className={`link-item ${previewNode?.id === node.id ? 'active' : ''}`}
+						key={node.id}
+						onClick={() => setPreviewNode(node)}
+					>
+						{node.label} ({getLinkedNodes(node.id)?.length || 0})
 					</div>
 				))}
 			</div>
@@ -160,6 +194,19 @@ export default function Home() {
 					onSuccess={() => handleUpdateAction(true)}
 					onError={() => handleUpdateAction(true)}
 					overrides={{
+						ClearButton: {
+							size: 'small',
+						},
+						SubmitButton: {
+							children: 'Create',
+							size: 'small',
+						},
+						label: {
+							size: 'small',
+							label: '',
+							placeholder: 'Enter name',
+							errorMessage: '',
+						},
 						note: {
 							display: 'none',
 						},
@@ -169,35 +216,7 @@ export default function Home() {
 
 			{!!previewNode && (
 				<Card id="preview-node">
-					<Button onClick={() => setPreviewNode(null)}>Close</Button>
-					<Flex alignItems={'center'}>
-						<Text flex={1}>{previewNode.label}</Text>
-						{previewEditNodeId === previewNode.id ? (
-							<Button //
-								size="small"
-								gap={'0.3rem'}
-								colorTheme="info"
-								onClick={() => setPreviewEditNodeId(null)}
-							>
-								<IconEditOff />
-								Cancel
-							</Button>
-						) : (
-							<Button //
-								size="small"
-								gap={'0.3rem'}
-								colorTheme="info"
-								onClick={() => setPreviewEditNodeId(previewNode.id)}
-								disabled={
-									previewEditNodeId === previewNode.id ||
-									deleteMutation.isPending
-								}
-							>
-								<IconEdit />
-								Edit
-							</Button>
-						)}
-
+					<Flex alignItems={'center'} justifyContent={'flex-end'}>
 						<Button
 							size="small"
 							gap={'0.3rem'}
@@ -207,7 +226,6 @@ export default function Home() {
 								handleUpdateAction(true);
 							}}
 							disabled={
-								previewEditNodeId === previewNode.id ||
 								deleteMutation.isPending ||
 								nodeLinks?.some(
 									({ targetId, sourceId }) =>
@@ -216,29 +234,33 @@ export default function Home() {
 							}
 						>
 							<IconTrash />
-							Remove
+							Delete
+						</Button>
+						<Button size="small" onClick={() => setPreviewNode(null)}>
+							<IconX />
+							Close
 						</Button>
 					</Flex>
 
-					<Flex>
-						{!!previewNode?.note && (
-							<Message variation="outlined" colorTheme="neutral" width={'100%'}>
-								{previewNode?.note}
-							</Message>
-						)}
-					</Flex>
+					<NodeUpdateForm
+						id={previewNode.id}
+						onSuccess={(updatedData) => {
+							setPreviewNode((prev: any) => {
+								return { ...prev, ...updatedData };
+							});
 
-					{previewEditNodeId === previewNode.id && (
-						<NodeUpdateForm
-							id={previewNode.id}
-							onSuccess={() => handleUpdateAction(true)}
-							onError={() => handleUpdateAction(true)}
-						/>
-					)}
-
-					<Divider marginTop={18} orientation="horizontal" />
-
-					{/*  */}
+							handleUpdateAction(false);
+						}}
+						onError={() => handleUpdateAction(false)}
+						overrides={{
+							SubmitButton: {
+								children: 'Update',
+							},
+							ResetButton: {
+								children: 'Undo',
+							},
+						}}
+					/>
 
 					<Autocomplete
 						marginTop={2}
@@ -263,7 +285,8 @@ export default function Home() {
 						renderOption={(option, value) => (
 							<HighlightMatch query={value}>{option?.label}</HighlightMatch>
 						)}
-						onSubmit={console.log}
+						onChange={(e) => setLinkTo(e.target.value)}
+						value={linkTo}
 						onSelect={async (opt) => {
 							await client.models.NodeLink.create({
 								category: 'test',
@@ -271,12 +294,13 @@ export default function Home() {
 								targetId: opt.id,
 							});
 							handleUpdateAction(false);
+							setLinkTo('');
 						}}
 					/>
 
 					<Autocomplete
 						marginTop={2}
-						label="Unlink from"
+						label="Unlink From"
 						labelHidden={false}
 						isLoading={isLoading}
 						options={data as any}
@@ -294,7 +318,8 @@ export default function Home() {
 								: false) &&
 							opt.label.toLowerCase().includes(val.toLowerCase())
 						}
-						onSubmit={console.log}
+						value={linkFrom}
+						onChange={(e) => setLinkFrom(e.target.value)}
 						onSelect={async (opt) => {
 							const linkNode = nodeLinks?.find(
 								({ targetId, sourceId }) =>
@@ -307,9 +332,23 @@ export default function Home() {
 									id: linkNode.id as string,
 								});
 								handleUpdateAction(false);
+								setLinkFrom('');
 							}
 						}}
 					/>
+
+					<Flex gap={6} wrap={'wrap'} marginTop={14}>
+						{getLinkedNodes(previewNode.id)?.map((node) => (
+							<Badge
+								variation="info"
+								style={{ cursor: 'pointer' }}
+								key={node.id}
+								onClick={() => setPreviewNode(node)}
+							>
+								{node.label}
+							</Badge>
+						))}
+					</Flex>
 				</Card>
 			)}
 		</>
