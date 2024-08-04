@@ -3,170 +3,170 @@
 // this is an auto generated file. This will be overwritten
 
 export const createNode = /* GraphQL */ `
-  mutation CreateNode(
-    $condition: ModelNodeConditionInput
-    $input: CreateNodeInput!
-  ) {
-    createNode(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
-      owner
-      sourceNodes {
-        nextToken
-        __typename
-      }
-      targetNodes {
-        nextToken
-        __typename
-      }
-      updatedAt
-      __typename
-    }
-  }
+	mutation CreateNode(
+		$condition: ModelNodeConditionInput
+		$input: CreateNodeInput!
+	) {
+		createNode(condition: $condition, input: $input) {
+			createdAt
+			id
+			name
+			owner
+			sourceNodes {
+				nextToken
+				__typename
+			}
+			targetNodes {
+				nextToken
+				__typename
+			}
+			updatedAt
+			__typename
+		}
+	}
 `;
 export const createNodeLink = /* GraphQL */ `
-  mutation CreateNodeLink(
-    $condition: ModelNodeLinkConditionInput
-    $input: CreateNodeLinkInput!
-  ) {
-    createNodeLink(condition: $condition, input: $input) {
-      category
-      createdAt
-      id
-      owner
-      source {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      sourceId
-      target {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      targetId
-      updatedAt
-      __typename
-    }
-  }
+	mutation CreateNodeLink(
+		$condition: ModelNodeLinkConditionInput
+		$input: CreateNodeLinkInput!
+	) {
+		createNodeLink(condition: $condition, input: $input) {
+			category
+			createdAt
+			id
+			owner
+			source {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			sourceId
+			target {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			targetId
+			updatedAt
+			__typename
+		}
+	}
 `;
 export const deleteNode = /* GraphQL */ `
-  mutation DeleteNode(
-    $condition: ModelNodeConditionInput
-    $input: DeleteNodeInput!
-  ) {
-    deleteNode(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
-      owner
-      sourceNodes {
-        nextToken
-        __typename
-      }
-      targetNodes {
-        nextToken
-        __typename
-      }
-      updatedAt
-      __typename
-    }
-  }
+	mutation DeleteNode(
+		$condition: ModelNodeConditionInput
+		$input: DeleteNodeInput!
+	) {
+		deleteNode(condition: $condition, input: $input) {
+			createdAt
+			id
+			name
+			owner
+			sourceNodes {
+				nextToken
+				__typename
+			}
+			targetNodes {
+				nextToken
+				__typename
+			}
+			updatedAt
+			__typename
+		}
+	}
 `;
 export const deleteNodeLink = /* GraphQL */ `
-  mutation DeleteNodeLink(
-    $condition: ModelNodeLinkConditionInput
-    $input: DeleteNodeLinkInput!
-  ) {
-    deleteNodeLink(condition: $condition, input: $input) {
-      category
-      createdAt
-      id
-      owner
-      source {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      sourceId
-      target {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      targetId
-      updatedAt
-      __typename
-    }
-  }
+	mutation DeleteNodeLink(
+		$condition: ModelNodeLinkConditionInput
+		$input: DeleteNodeLinkInput!
+	) {
+		deleteNodeLink(condition: $condition, input: $input) {
+			category
+			createdAt
+			id
+			owner
+			source {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			sourceId
+			target {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			targetId
+			updatedAt
+			__typename
+		}
+	}
 `;
 export const updateNode = /* GraphQL */ `
-  mutation UpdateNode(
-    $condition: ModelNodeConditionInput
-    $input: UpdateNodeInput!
-  ) {
-    updateNode(condition: $condition, input: $input) {
-      createdAt
-      id
-      name
-      owner
-      sourceNodes {
-        nextToken
-        __typename
-      }
-      targetNodes {
-        nextToken
-        __typename
-      }
-      updatedAt
-      __typename
-    }
-  }
+	mutation UpdateNode(
+		$condition: ModelNodeConditionInput
+		$input: UpdateNodeInput!
+	) {
+		updateNode(condition: $condition, input: $input) {
+			createdAt
+			id
+			name
+			owner
+			sourceNodes {
+				nextToken
+				__typename
+			}
+			targetNodes {
+				nextToken
+				__typename
+			}
+			updatedAt
+			__typename
+		}
+	}
 `;
 export const updateNodeLink = /* GraphQL */ `
-  mutation UpdateNodeLink(
-    $condition: ModelNodeLinkConditionInput
-    $input: UpdateNodeLinkInput!
-  ) {
-    updateNodeLink(condition: $condition, input: $input) {
-      category
-      createdAt
-      id
-      owner
-      source {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      sourceId
-      target {
-        createdAt
-        id
-        name
-        owner
-        updatedAt
-        __typename
-      }
-      targetId
-      updatedAt
-      __typename
-    }
-  }
+	mutation UpdateNodeLink(
+		$condition: ModelNodeLinkConditionInput
+		$input: UpdateNodeLinkInput!
+	) {
+		updateNodeLink(condition: $condition, input: $input) {
+			category
+			createdAt
+			id
+			owner
+			source {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			sourceId
+			target {
+				createdAt
+				id
+				name
+				owner
+				updatedAt
+				__typename
+			}
+			targetId
+			updatedAt
+			__typename
+		}
+	}
 `;

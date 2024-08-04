@@ -1,0 +1,4 @@
+node_modules
+.next
+.amplify
+ui-components

@@ -1,28 +1,28 @@
-import { type ClientSchema, a, defineData } from "@aws-amplify/backend";
+import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
 const schema = a
-  .schema({
-    NodeLink: a.model({
-      category: a.string(),
+	.schema({
+		NodeLink: a.model({
+			category: a.string(),
 
-      sourceId: a.id().required(),
-      source: a.belongsTo("Node", "sourceId"),
-      targetId: a.id().required(),
-      target: a.belongsTo("Node", "targetId"),
-    }),
-    Node: a.model({
-      name: a.string().required(),
-      sourceNodes: a.hasMany("NodeLink", "sourceId"),
-      targetNodes: a.hasMany("NodeLink", "targetId"),
-    }),
-  })
-  .authorization((allow) => [allow.owner()]);
+			sourceId: a.id().required(),
+			source: a.belongsTo('Node', 'sourceId'),
+			targetId: a.id().required(),
+			target: a.belongsTo('Node', 'targetId'),
+		}),
+		Node: a.model({
+			name: a.string().required(),
+			sourceNodes: a.hasMany('NodeLink', 'sourceId'),
+			targetNodes: a.hasMany('NodeLink', 'targetId'),
+		}),
+	})
+	.authorization((allow) => [allow.owner()]);
 
 export type Schema = ClientSchema<typeof schema>;
 
 export const data = defineData({
-  schema,
-  authorizationModes: {
-    defaultAuthorizationMode: "userPool",
-  },
+	schema,
+	authorizationModes: {
+		defaultAuthorizationMode: 'userPool',
+	},
 });
