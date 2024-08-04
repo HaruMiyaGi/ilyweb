@@ -19,15 +19,19 @@ export default function NodeCreateForm(props) {
   } = props;
   const initialValues = {
     label: "",
+    note: "",
   };
   const [label, setLabel] = React.useState(initialValues.label);
+  const [note, setNote] = React.useState(initialValues.note);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     setLabel(initialValues.label);
+    setNote(initialValues.note);
     setErrors({});
   };
   const validations = {
     label: [{ type: "Required" }],
+    note: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -56,6 +60,7 @@ export default function NodeCreateForm(props) {
         event.preventDefault();
         let modelFields = {
           label,
+          note,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -119,6 +124,7 @@ export default function NodeCreateForm(props) {
           if (onChange) {
             const modelFields = {
               label: value,
+              note,
             };
             const result = onChange(modelFields);
             value = result?.label ?? value;
@@ -132,6 +138,31 @@ export default function NodeCreateForm(props) {
         errorMessage={errors.label?.errorMessage}
         hasError={errors.label?.hasError}
         {...getOverrideProps(overrides, "label")}
+      ></TextField>
+      <TextField
+        label="Note"
+        isRequired={false}
+        isReadOnly={false}
+        value={note}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              label,
+              note: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.note ?? value;
+          }
+          if (errors.note?.hasError) {
+            runValidationTasks("note", value);
+          }
+          setNote(value);
+        }}
+        onBlur={() => runValidationTasks("note", note)}
+        errorMessage={errors.note?.errorMessage}
+        hasError={errors.note?.hasError}
+        {...getOverrideProps(overrides, "note")}
       ></TextField>
       <Flex
         justifyContent="space-between"

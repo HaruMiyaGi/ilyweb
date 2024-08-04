@@ -162,6 +162,13 @@
               "isRequired": true,
               "attributes": []
             },
+            "note": {
+              "name": "note",
+              "isArray": false,
+              "type": "String",
+              "isRequired": false,
+              "attributes": []
+            },
             "sourceNodes": {
               "name": "sourceNodes",
               "isArray": true,

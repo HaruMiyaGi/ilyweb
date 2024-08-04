@@ -113,20 +113,20 @@ export default ({ ...params }: IParams) => {
 				//
 
 				onNodeClick={(node: any) => {
-					const distance = 40;
-					const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
+					// const distance = 40;
+					// const distRatio = 1 + distance / Math.hypot(node.x, node.y, node.z);
 
-					if (fgRef.current) {
-						fgRef.current.cameraPosition(
-							{
-								x: node.x * distRatio,
-								y: node.y * distRatio,
-								z: node.z * distRatio,
-							}, // new position
-							node, // lookAt ({ x, y, z })
-							1000, // ms transition duration
-						);
-					}
+					// if (fgRef.current) {
+					// 	fgRef.current.cameraPosition(
+					// 		{
+					// 			x: node.x * distRatio,
+					// 			y: node.y * distRatio,
+					// 			z: node.z * distRatio,
+					// 		}, // new position
+					// 		node, // lookAt ({ x, y, z })
+					// 		1000, // ms transition duration
+					// 	);
+					// }
 
 					params.onNodeSelect(node);
 				}}

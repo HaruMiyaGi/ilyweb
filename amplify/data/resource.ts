@@ -12,6 +12,7 @@ const schema = a
 		}),
 		Node: a.model({
 			label: a.string().required(),
+			note: a.string(),
 			sourceNodes: a.hasMany('NodeLink', 'sourceId'),
 			targetNodes: a.hasMany('NodeLink', 'targetId'),
 		}),

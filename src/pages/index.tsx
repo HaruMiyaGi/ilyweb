@@ -4,9 +4,11 @@ import {
 	Autocomplete,
 	Button,
 	Card,
+	Divider,
 	Flex,
 	HighlightMatch,
 	Loader,
+	Message,
 	Text,
 } from '@aws-amplify/ui-react';
 import { IconEdit, IconEditOff, IconTrash } from '@tabler/icons-react';
@@ -157,6 +159,11 @@ export default function Home() {
 				<NodeCreateForm
 					onSuccess={() => handleUpdateAction(true)}
 					onError={() => handleUpdateAction(true)}
+					overrides={{
+						note: {
+							display: 'none',
+						},
+					}}
 				/>
 			</div>
 
@@ -213,13 +220,27 @@ export default function Home() {
 						</Button>
 					</Flex>
 
+					<Flex>
+						{!!previewNode?.note && (
+							<Message
+								variation="outlined"
+								colorTheme="neutral"
+								width={'100%'}
+							>
+								{previewNode?.note}
+							</Message>
+						)}
+					</Flex>
+
 					{previewEditNodeId === previewNode.id && (
 						<NodeUpdateForm
 							id={previewNode.id}
-							onSuccess={() => handleUpdateAction(false)}
-							onError={() => handleUpdateAction(false)}
+							onSuccess={() => handleUpdateAction(true)}
+							onError={() => handleUpdateAction(true)}
 						/>
 					)}
+
+					<Divider marginTop={18} orientation="horizontal" />
 
 					{/*  */}
 

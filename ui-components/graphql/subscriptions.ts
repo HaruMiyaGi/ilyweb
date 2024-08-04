@@ -11,6 +11,7 @@ export const onCreateNode = /* GraphQL */ `
       createdAt
       id
       label
+      note
       owner
       sourceNodes {
         nextToken
@@ -39,6 +40,7 @@ export const onCreateNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -48,6 +50,7 @@ export const onCreateNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -67,6 +70,7 @@ export const onDeleteNode = /* GraphQL */ `
       createdAt
       id
       label
+      note
       owner
       sourceNodes {
         nextToken
@@ -95,6 +99,7 @@ export const onDeleteNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -104,6 +109,7 @@ export const onDeleteNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -123,6 +129,7 @@ export const onUpdateNode = /* GraphQL */ `
       createdAt
       id
       label
+      note
       owner
       sourceNodes {
         nextToken
@@ -151,6 +158,7 @@ export const onUpdateNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -160,6 +168,7 @@ export const onUpdateNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename

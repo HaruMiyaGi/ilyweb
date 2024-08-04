@@ -1,11 +1,11 @@
 /* eslint-disable */
 "use client";
-import * as React from "react";
-import { Button, Flex, Grid, TextField } from "@aws-amplify/ui-react";
-import { fetchByPath, getOverrideProps, validateField } from "./utils";
+import { Button, Flex, Grid, TextAreaField, TextField } from "@aws-amplify/ui-react";
 import { generateClient } from "aws-amplify/api";
-import { getNode } from "./graphql/queries";
+import * as React from "react";
 import { updateNode } from "./graphql/mutations";
+import { getNode } from "./graphql/queries";
+import { fetchByPath, getOverrideProps, validateField } from "./utils";
 const client = generateClient();
 export default function NodeUpdateForm(props) {
   const {
@@ -21,14 +21,17 @@ export default function NodeUpdateForm(props) {
   } = props;
   const initialValues = {
     label: "",
+    note: "",
   };
   const [label, setLabel] = React.useState(initialValues.label);
+  const [note, setNote] = React.useState(initialValues.note);
   const [errors, setErrors] = React.useState({});
   const resetStateValues = () => {
     const cleanValues = nodeRecord
       ? { ...initialValues, ...nodeRecord }
       : initialValues;
     setLabel(cleanValues.label);
+    setNote(cleanValues.note);
     setErrors({});
   };
   const [nodeRecord, setNodeRecord] = React.useState(nodeModelProp);
@@ -49,6 +52,7 @@ export default function NodeUpdateForm(props) {
   React.useEffect(resetStateValues, [nodeRecord]);
   const validations = {
     label: [{ type: "Required" }],
+    note: [],
   };
   const runValidationTasks = async (
     fieldName,
@@ -77,6 +81,7 @@ export default function NodeUpdateForm(props) {
         event.preventDefault();
         let modelFields = {
           label,
+          note: note ?? null,
         };
         const validationResponses = await Promise.all(
           Object.keys(validations).reduce((promises, fieldName) => {
@@ -138,6 +143,7 @@ export default function NodeUpdateForm(props) {
           if (onChange) {
             const modelFields = {
               label: value,
+              note,
             };
             const result = onChange(modelFields);
             value = result?.label ?? value;
@@ -152,6 +158,31 @@ export default function NodeUpdateForm(props) {
         hasError={errors.label?.hasError}
         {...getOverrideProps(overrides, "label")}
       ></TextField>
+      <TextAreaField
+        label="Note"
+        isRequired={false}
+        isReadOnly={false}
+        value={note}
+        onChange={(e) => {
+          let { value } = e.target;
+          if (onChange) {
+            const modelFields = {
+              label,
+              note: value,
+            };
+            const result = onChange(modelFields);
+            value = result?.note ?? value;
+          }
+          if (errors.note?.hasError) {
+            runValidationTasks("note", value);
+          }
+          setNote(value);
+        }}
+        onBlur={() => runValidationTasks("note", note)}
+        errorMessage={errors.note?.errorMessage}
+        hasError={errors.note?.hasError}
+        {...getOverrideProps(overrides, "note")}
+      ></TextAreaField>
       <Flex
         justifyContent="space-between"
         {...getOverrideProps(overrides, "CTAFlex")}

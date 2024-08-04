@@ -8,6 +8,7 @@ export const getNode = /* GraphQL */ `
       createdAt
       id
       label
+      note
       owner
       sourceNodes {
         nextToken
@@ -33,6 +34,7 @@ export const getNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -42,6 +44,7 @@ export const getNodeLink = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
@@ -85,6 +88,7 @@ export const listNodes = /* GraphQL */ `
         createdAt
         id
         label
+        note
         owner
         updatedAt
         __typename
