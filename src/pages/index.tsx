@@ -222,11 +222,7 @@ export default function Home() {
 
 					<Flex>
 						{!!previewNode?.note && (
-							<Message
-								variation="outlined"
-								colorTheme="neutral"
-								width={'100%'}
-							>
+							<Message variation="outlined" colorTheme="neutral" width={'100%'}>
 								{previewNode?.note}
 							</Message>
 						)}

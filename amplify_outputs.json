@@ -1,260 +1,234 @@
 {
-  "auth": {
-    "user_pool_id": "eu-west-2_OKBGZPp1w",
-    "aws_region": "eu-west-2",
-    "user_pool_client_id": "cl3j3efshn6o295e6m5pljkqd",
-    "identity_pool_id": "eu-west-2:1d8688ab-bec0-4593-8ccf-25a817dc45f8",
-    "mfa_methods": [],
-    "standard_required_attributes": [
-      "email"
-    ],
-    "username_attributes": [
-      "email"
-    ],
-    "user_verification_types": [
-      "email"
-    ],
-    "mfa_configuration": "NONE",
-    "password_policy": {
-      "min_length": 8,
-      "require_lowercase": true,
-      "require_numbers": true,
-      "require_symbols": true,
-      "require_uppercase": true
-    },
-    "unauthenticated_identities_enabled": true
-  },
-  "data": {
-    "url": "https://pxks2dkm4fgitgvlcv3mruqfqy.appsync-api.eu-west-2.amazonaws.com/graphql",
-    "aws_region": "eu-west-2",
-    "default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
-    "authorization_types": [
-      "AWS_IAM"
-    ],
-    "model_introspection": {
-      "version": 1,
-      "models": {
-        "NodeLink": {
-          "name": "NodeLink",
-          "fields": {
-            "id": {
-              "name": "id",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": true,
-              "attributes": []
-            },
-            "category": {
-              "name": "category",
-              "isArray": false,
-              "type": "String",
-              "isRequired": false,
-              "attributes": []
-            },
-            "sourceId": {
-              "name": "sourceId",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": true,
-              "attributes": []
-            },
-            "source": {
-              "name": "source",
-              "isArray": false,
-              "type": {
-                "model": "Node"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "association": {
-                "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "sourceId"
-                ]
-              }
-            },
-            "targetId": {
-              "name": "targetId",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": true,
-              "attributes": []
-            },
-            "target": {
-              "name": "target",
-              "isArray": false,
-              "type": {
-                "model": "Node"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "association": {
-                "connectionType": "BELONGS_TO",
-                "targetNames": [
-                  "targetId"
-                ]
-              }
-            },
-            "createdAt": {
-              "name": "createdAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-            },
-            "updatedAt": {
-              "name": "updatedAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-            }
-          },
-          "syncable": true,
-          "pluralName": "NodeLinks",
-          "attributes": [
-            {
-              "type": "model",
-              "properties": {}
-            },
-            {
-              "type": "auth",
-              "properties": {
-                "rules": [
-                  {
-                    "provider": "userPools",
-                    "ownerField": "owner",
-                    "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "primaryKeyInfo": {
-            "isCustomPrimaryKey": false,
-            "primaryKeyFieldName": "id",
-            "sortKeyFieldNames": []
-          }
-        },
-        "Node": {
-          "name": "Node",
-          "fields": {
-            "id": {
-              "name": "id",
-              "isArray": false,
-              "type": "ID",
-              "isRequired": true,
-              "attributes": []
-            },
-            "label": {
-              "name": "label",
-              "isArray": false,
-              "type": "String",
-              "isRequired": true,
-              "attributes": []
-            },
-            "note": {
-              "name": "note",
-              "isArray": false,
-              "type": "String",
-              "isRequired": false,
-              "attributes": []
-            },
-            "sourceNodes": {
-              "name": "sourceNodes",
-              "isArray": true,
-              "type": {
-                "model": "NodeLink"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "isArrayNullable": true,
-              "association": {
-                "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "sourceId"
-                ]
-              }
-            },
-            "targetNodes": {
-              "name": "targetNodes",
-              "isArray": true,
-              "type": {
-                "model": "NodeLink"
-              },
-              "isRequired": false,
-              "attributes": [],
-              "isArrayNullable": true,
-              "association": {
-                "connectionType": "HAS_MANY",
-                "associatedWith": [
-                  "targetId"
-                ]
-              }
-            },
-            "createdAt": {
-              "name": "createdAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-            },
-            "updatedAt": {
-              "name": "updatedAt",
-              "isArray": false,
-              "type": "AWSDateTime",
-              "isRequired": false,
-              "attributes": [],
-              "isReadOnly": true
-            }
-          },
-          "syncable": true,
-          "pluralName": "Nodes",
-          "attributes": [
-            {
-              "type": "model",
-              "properties": {}
-            },
-            {
-              "type": "auth",
-              "properties": {
-                "rules": [
-                  {
-                    "provider": "userPools",
-                    "ownerField": "owner",
-                    "allow": "owner",
-                    "identityClaim": "cognito:username",
-                    "operations": [
-                      "create",
-                      "update",
-                      "delete",
-                      "read"
-                    ]
-                  }
-                ]
-              }
-            }
-          ],
-          "primaryKeyInfo": {
-            "isCustomPrimaryKey": false,
-            "primaryKeyFieldName": "id",
-            "sortKeyFieldNames": []
-          }
-        }
-      },
-      "enums": {},
-      "nonModels": {}
-    }
-  },
-  "version": "1"
+	"auth": {
+		"user_pool_id": "eu-west-2_OKBGZPp1w",
+		"aws_region": "eu-west-2",
+		"user_pool_client_id": "cl3j3efshn6o295e6m5pljkqd",
+		"identity_pool_id": "eu-west-2:1d8688ab-bec0-4593-8ccf-25a817dc45f8",
+		"mfa_methods": [],
+		"standard_required_attributes": ["email"],
+		"username_attributes": ["email"],
+		"user_verification_types": ["email"],
+		"mfa_configuration": "NONE",
+		"password_policy": {
+			"min_length": 8,
+			"require_lowercase": true,
+			"require_numbers": true,
+			"require_symbols": true,
+			"require_uppercase": true
+		},
+		"unauthenticated_identities_enabled": true
+	},
+	"data": {
+		"url": "https://pxks2dkm4fgitgvlcv3mruqfqy.appsync-api.eu-west-2.amazonaws.com/graphql",
+		"aws_region": "eu-west-2",
+		"default_authorization_type": "AMAZON_COGNITO_USER_POOLS",
+		"authorization_types": ["AWS_IAM"],
+		"model_introspection": {
+			"version": 1,
+			"models": {
+				"NodeLink": {
+					"name": "NodeLink",
+					"fields": {
+						"id": {
+							"name": "id",
+							"isArray": false,
+							"type": "ID",
+							"isRequired": true,
+							"attributes": []
+						},
+						"category": {
+							"name": "category",
+							"isArray": false,
+							"type": "String",
+							"isRequired": false,
+							"attributes": []
+						},
+						"sourceId": {
+							"name": "sourceId",
+							"isArray": false,
+							"type": "ID",
+							"isRequired": true,
+							"attributes": []
+						},
+						"source": {
+							"name": "source",
+							"isArray": false,
+							"type": {
+								"model": "Node"
+							},
+							"isRequired": false,
+							"attributes": [],
+							"association": {
+								"connectionType": "BELONGS_TO",
+								"targetNames": ["sourceId"]
+							}
+						},
+						"targetId": {
+							"name": "targetId",
+							"isArray": false,
+							"type": "ID",
+							"isRequired": true,
+							"attributes": []
+						},
+						"target": {
+							"name": "target",
+							"isArray": false,
+							"type": {
+								"model": "Node"
+							},
+							"isRequired": false,
+							"attributes": [],
+							"association": {
+								"connectionType": "BELONGS_TO",
+								"targetNames": ["targetId"]
+							}
+						},
+						"createdAt": {
+							"name": "createdAt",
+							"isArray": false,
+							"type": "AWSDateTime",
+							"isRequired": false,
+							"attributes": [],
+							"isReadOnly": true
+						},
+						"updatedAt": {
+							"name": "updatedAt",
+							"isArray": false,
+							"type": "AWSDateTime",
+							"isRequired": false,
+							"attributes": [],
+							"isReadOnly": true
+						}
+					},
+					"syncable": true,
+					"pluralName": "NodeLinks",
+					"attributes": [
+						{
+							"type": "model",
+							"properties": {}
+						},
+						{
+							"type": "auth",
+							"properties": {
+								"rules": [
+									{
+										"provider": "userPools",
+										"ownerField": "owner",
+										"allow": "owner",
+										"identityClaim": "cognito:username",
+										"operations": ["create", "update", "delete", "read"]
+									}
+								]
+							}
+						}
+					],
+					"primaryKeyInfo": {
+						"isCustomPrimaryKey": false,
+						"primaryKeyFieldName": "id",
+						"sortKeyFieldNames": []
+					}
+				},
+				"Node": {
+					"name": "Node",
+					"fields": {
+						"id": {
+							"name": "id",
+							"isArray": false,
+							"type": "ID",
+							"isRequired": true,
+							"attributes": []
+						},
+						"label": {
+							"name": "label",
+							"isArray": false,
+							"type": "String",
+							"isRequired": true,
+							"attributes": []
+						},
+						"note": {
+							"name": "note",
+							"isArray": false,
+							"type": "String",
+							"isRequired": false,
+							"attributes": []
+						},
+						"sourceNodes": {
+							"name": "sourceNodes",
+							"isArray": true,
+							"type": {
+								"model": "NodeLink"
+							},
+							"isRequired": false,
+							"attributes": [],
+							"isArrayNullable": true,
+							"association": {
+								"connectionType": "HAS_MANY",
+								"associatedWith": ["sourceId"]
+							}
+						},
+						"targetNodes": {
+							"name": "targetNodes",
+							"isArray": true,
+							"type": {
+								"model": "NodeLink"
+							},
+							"isRequired": false,
+							"attributes": [],
+							"isArrayNullable": true,
+							"association": {
+								"connectionType": "HAS_MANY",
+								"associatedWith": ["targetId"]
+							}
+						},
+						"createdAt": {
+							"name": "createdAt",
+							"isArray": false,
+							"type": "AWSDateTime",
+							"isRequired": false,
+							"attributes": [],
+							"isReadOnly": true
+						},
+						"updatedAt": {
+							"name": "updatedAt",
+							"isArray": false,
+							"type": "AWSDateTime",
+							"isRequired": false,
+							"attributes": [],
+							"isReadOnly": true
+						}
+					},
+					"syncable": true,
+					"pluralName": "Nodes",
+					"attributes": [
+						{
+							"type": "model",
+							"properties": {}
+						},
+						{
+							"type": "auth",
+							"properties": {
+								"rules": [
+									{
+										"provider": "userPools",
+										"ownerField": "owner",
+										"allow": "owner",
+										"identityClaim": "cognito:username",
+										"operations": ["create", "update", "delete", "read"]
+									}
+								]
+							}
+						}
+					],
+					"primaryKeyInfo": {
+						"isCustomPrimaryKey": false,
+						"primaryKeyFieldName": "id",
+						"sortKeyFieldNames": []
+					}
+				}
+			},
+			"enums": {},
+			"nonModels": {}
+		}
+	},
+	"version": "1"
 }

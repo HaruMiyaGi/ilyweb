@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 export default function useResize(gridId: string) {
 	const [size, setSize] = useState({ width: 250, height: 250 });
 
-	const onResize = () => {
+	const onResizeHandler = useCallback(() => {
 		const element = document.getElementById(gridId);
 		if (element) {
 			setSize({
@@ -11,18 +11,15 @@ export default function useResize(gridId: string) {
 				height: element.clientHeight,
 			});
 		} else {
-			setSize({
-				width: 250,
-				height: 250,
-			});
+			setSize({ width: 250, height: 250 });
 		}
-	};
-
-	useEffect(() => {
-		onResize();
-		window.addEventListener('resize', onResize);
-		return () => window.removeEventListener('resize', onResize);
 	}, [gridId]);
 
-	return { data: size, action: onResize };
+	useEffect(() => {
+		onResizeHandler();
+		window.addEventListener('resize', onResizeHandler);
+		return () => window.removeEventListener('resize', onResizeHandler);
+	}, [gridId, onResizeHandler]);
+
+	return { data: size, action: onResizeHandler };
 }

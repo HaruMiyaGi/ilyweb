@@ -104,7 +104,7 @@ export default ({ ...params }: IParams) => {
 								<Card key={`${params.keyName}-${index}`}>
 									<Flex alignItems={'center'}>
 										<pre style={{ flex: 1 }}>
-											{JSON.stringify(item?.name, null, 2)}
+											{JSON.stringify(item, null, 2)}
 										</pre>
 
 										{editItemId === item.id ? (
