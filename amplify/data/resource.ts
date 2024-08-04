@@ -11,7 +11,7 @@ const schema = a
 			target: a.belongsTo('Node', 'targetId'),
 		}),
 		Node: a.model({
-			name: a.string().required(),
+			label: a.string().required(),
 			sourceNodes: a.hasMany('NodeLink', 'sourceId'),
 			targetNodes: a.hasMany('NodeLink', 'targetId'),
 		}),

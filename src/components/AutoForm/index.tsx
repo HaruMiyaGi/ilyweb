@@ -7,12 +7,9 @@ import {
 	Loader,
 	Text,
 } from '@aws-amplify/ui-react';
+import { IconEdit, IconEditOff, IconTrash } from '@tabler/icons-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
-import { V6Client } from '@aws-amplify/api-graphql';
-import { Schema } from '../../../amplify/data/resource';
-import { IconEdit, IconEditOff, IconTrash } from '@tabler/icons-react';
-import { ClientSchema } from '@aws-amplify/backend';
 
 interface IParams {
 	// client: V6Client<Schema>;
@@ -107,7 +104,7 @@ export default ({ ...params }: IParams) => {
 								<Card key={`${params.keyName}-${index}`}>
 									<Flex alignItems={'center'}>
 										<pre style={{ flex: 1 }}>
-											{JSON.stringify(item, null, 2)}
+											{JSON.stringify(item?.name, null, 2)}
 										</pre>
 
 										{editItemId === item.id ? (
