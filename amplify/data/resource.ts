@@ -26,4 +26,5 @@ export const data = defineData({
 	authorizationModes: {
 		defaultAuthorizationMode: 'userPool',
 	},
+	bug
 });
